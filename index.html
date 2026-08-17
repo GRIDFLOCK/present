@@ -205,8 +205,8 @@
                 card.style.backgroundColor = '#e1f5fe';
 
                 setTimeout(() => {
-                    alert('Вітаю! Ви успішно увійшли. 💖');
-                }, 300);   
+                    window.location.href = 'present.html';
+                }, 1000);   
             } else {
                 message.className = 'message error';
                 message.textContent = 'Невірний пароль. Спробуйте ще раз. ❌🥺';

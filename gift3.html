@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Подарунок №3 🎮</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comfortaa', cursive, sans-serif; }
+    body { background-color: #f9e8ee; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+    
+    .card-container { background: #fff; border-radius: 30px; padding: 25px 20px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 15px 35px rgba(233, 150, 175, 0.25); border: 3px solid #f2cddb; }
+    .title { color: #7b2cbf; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: #ad1457; font-size: 14px; font-weight: 600; margin-bottom: 15px; }
+    
+    /* Ігрове поле */
+    .game-box { width: 100%; height: 260px; background: #fff0f5; border: 2.5px dashed #f48fb1; border-radius: 20px; position: relative; overflow: hidden; margin-bottom: 15px; }
+    
+    .heart-item { position: absolute; font-size: 32px; cursor: pointer; user-select: none; animation: pop 0.2s ease; }
+    @keyframes pop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+    
+    .win-screen { display: none; padding: 20px; }
+    .win-title { color: #66bb6a; font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+
+    .back-btn { display: inline-block; padding: 10px 20px; color: #ad1457; text-decoration: none; font-size: 13px; font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <div class="card-container">
+    <div id="gameUI">
+      <h1 class="title">Мінігра: Лови сердечка 💖</h1>
+      <p class="subtitle" id="scoreText">Спіймано: 0 / 10</p>
+      
+      <div class="game-box" id="gameBox"></div>
+    </div>
+
+    <!-- Екран перемоги -->
+    <div class="win-screen" id="winScreen">
+      <h2 class="win-title">Ти перемогла! 🎉</h2>
+      <p style="color: #ad1457; font-weight: 600; font-size: 15px; margin-bottom: 20px;">
+        Твій головний приз — нескінченна кількість моїх обіймів та цілувашок у будь-який час! 😘
+      </p>
+    </div>
+
+    <a href="present.html" class="back-btn">← Назад до подарунків</a>
+  </div>
+
+  <script>
+    let score = 0;
+    const targetScore = 10;
+    const gameBox = document.getElementById('gameBox');
+
+    function spawnHeart() {
+      if (score >= targetScore) return;
+
+      const heart = document.createElement('div');
+      heart.className = 'heart-item';
+      heart.innerText = ['💖', '💗', '💕', '🌸'][Math.floor(Math.random() * 4)];
+
+      const x = Math.random() * (gameBox.clientWidth - 40);
+      const y = Math.random() * (gameBox.clientHeight - 40);
+
+      heart.style.left = `${x}px`;
+      heart.style.top = `${y}px`;
+
+      heart.onclick = () => {
+        score++;
+        document.getElementById('scoreText').innerText = `Спіймано: ${score} / ${targetScore}`;
+        heart.remove();
+
+        if (score >= targetScore) {
+          document.getElementById('gameUI').style.display = 'none';
+          document.getElementById('winScreen').style.display = 'block';
+        } else {
+          spawnHeart();
+        }
+      };
+
+      gameBox.appendChild(heart);
+    }
+
+    // Запуск першого сердечка
+    spawnHeart();
+  </script>
+
+</body>
+</html>

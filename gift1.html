@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Подарунок №1 💌</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comfortaa', cursive, sans-serif; }
+    body { background-color: #f9e8ee; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+    
+    .card-container { background: #fff; border-radius: 30px; padding: 30px 20px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 15px 35px rgba(233, 150, 175, 0.25); border: 3px solid #f2cddb; }
+    .title { color: #7b2cbf; font-size: 20px; margin-bottom: 8px; font-weight: 700; }
+    .hint-click { color: #ad1457; font-size: 13px; font-weight: 600; margin-bottom: 25px; }
+
+    /* Конструкція конверта */
+    .envelope-wrapper {
+      position: relative;
+      width: 260px;
+      height: 160px;
+      margin: 100px auto 40px; /* Запас зверху для листа, що висувається */
+      cursor: pointer;
+    }
+
+    .envelope {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #f8bbd0;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    }
+
+    /* Верхній відкривний клапан */
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 130px solid transparent;
+      border-right: 130px solid transparent;
+      border-top: 85px solid #ec407a;
+      transform-origin: top center;
+      transition: transform 0.4s ease, z-index 0.2s ease;
+      z-index: 4;
+    }
+
+    /* Передній трикутник кишені */
+    .pocket {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 130px solid #f48fb1;
+      border-right: 130px solid #f48fb1;
+      border-bottom: 90px solid #e91e63;
+      border-top: 70px solid transparent;
+      z-index: 3;
+      border-radius: 0 0 12px 12px;
+    }
+
+    /* Лист всередині */
+    .letter {
+      position: absolute;
+      bottom: 10px;
+      left: 15px;
+      right: 15px;
+      height: 130px;
+      background: #ffffff;
+      border: 2px dashed #f48fb1;
+      border-radius: 10px;
+      padding: 15px;
+      z-index: 2;
+      transition: transform 0.5s ease 0.2s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      text-align: left;
+      overflow-y: auto;
+    }
+
+    /* Стан відкритого конверта */
+    .envelope-wrapper.open .flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+
+    .envelope-wrapper.open .letter {
+      transform: translateY(-120px);
+      z-index: 5;
+      height: auto;
+      max-height: 220px;
+    }
+
+    .letter-title { color: #8e24aa; font-weight: 700; font-size: 15px; margin-bottom: 10px; text-align: center; }
+    .letter-text { color: #ad1457; font-size: 13px; line-height: 1.6; font-weight: 600; }
+
+    .back-btn { display: inline-block; padding: 12px 24px; background: linear-gradient(135deg, #ec407a, #d81b60); color: #fff; text-decoration: none; border-radius: 16px; font-weight: 700; font-size: 14px; margin-top: 15px; }
+  </style>
+</head>
+<body>
+
+  <div class="card-container">
+    <h1 class="title">Лист для тебе 💌</h1>
+    <p class="hint-click" id="hint">Торкнись конверта, щоб відкрити ✨</p>
+
+    <div class="envelope-wrapper" id="envelopeWrapper" onclick="openEnvelope()">
+      <div class="envelope">
+        <div class="flap"></div>
+        <div class="pocket"></div>
+        <div class="letter">
+          <div class="letter-title">Я тебе дуже кохаю! ✨</div>
+          <p class="letter-text">
+            Я вирішив написати цей лист, щоб ще раз нагадати тобі, наскільки ти важлива та особлива для мене.<br><br>
+            З того часу, як ти з'явилася в моєму житті, все навколо стало значно яскравішим, теплішим та сповненим особливого змісту. Твоя усмішка здатна миттєво підняти настрій у найважчий день, а твоя ніжність дарує відчуття справжнього затишку.<br><br>
+            Дякую тобі за твоє добре серце, за турботу, щирість та за кожен момент, проведений разом. Поруч із тобою я почуваюся неймовірно щасливим.<br><br>
+            Ти неймовірна, чарівна та наймиліша у світі! Пам'ятай, що я завжди поруч, готовий підтримати, захистити та просто міцно обійняти.<br><br>
+            Я тебе дуже сильно кохаю! 💖✨
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <a href="present.html" class="back-btn">← Назад до подарунків</a>
+  </div>
+
+  <script>
+    function openEnvelope() {
+      document.getElementById('envelopeWrapper').classList.toggle('open');
+      const hint = document.getElementById('hint');
+      if (document.getElementById('envelopeWrapper').classList.contains('open')) {
+        hint.innerText = "Для тебе з любов'ю! 🥰";
+      } else {
+        hint.innerText = "Торкнись конверта, щоб відкрити ✨";
+      }
+    }
+  </script>
+
+</body>
+</html>

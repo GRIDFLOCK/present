@@ -8,16 +8,12 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comfortaa', cursive, sans-serif; }
     body { background-color: #f9e8ee; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
-    
     .card-container { background: #fff; border-radius: 30px; padding: 30px 20px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 15px 35px rgba(233, 150, 175, 0.25); border: 3px solid #f2cddb; }
     .title { color: #7b2cbf; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
     .subtitle { color: #ad1457; font-size: 13px; font-weight: 600; margin-bottom: 20px; }
-    
     .wishes-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-    
-    .wish-card { background: #fff0f5; border: 2px solid #f48fb1; border-radius: 16px; padding: 12px 15px; text-align: left; font-size: 14px; color: #8e24aa; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: space-between; }
+    .wish-card { background: #fff0f5; border: 2px solid #f48fb1; border-radius: 16px; padding: 12px 15px; text-align: left; font-size: 13.5px; color: #8e24aa; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: space-between; }
     .wish-card.selected { background: #ec407a; color: #fff; border-color: #d81b60; transform: scale(1.02); }
-    
     .confirm-btn { width: 100%; padding: 14px; background: #66bb6a; border: none; border-radius: 16px; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; display: none; margin-bottom: 15px; }
     .back-btn { display: inline-block; padding: 10px 20px; color: #ad1457; text-decoration: none; font-size: 13px; font-weight: 700; }
   </style>
@@ -29,20 +25,22 @@
     <p class="subtitle" id="counter">Вибрано: 0 з 3</p>
 
     <div class="wishes-list">
-      <div class="wish-card" onclick="toggleWish(this)">💋 Серія ніжних поцілунків без приводу  <span>+</span></div>
       <div class="wish-card" onclick="toggleWish(this)">🫂 1000 щирих обіймів у будь-який момент <span>+</span></div>
-      <div class="wish-card" onclick="toggleWish(this)">🎬 Спільний перегляд будь-якого фільму <span>+</span></div>
-      <div class="wish-card" onclick="toggleWish(this)">💆‍♂️ Масаж після важкого дня <span>+</span></div>
-      <div class="wish-card" onclick="toggleWish(this)">👑 Виконання будь-якого примхи без заперечень <span>+</span></div>
+      <div class="wish-card" onclick="toggleWish(this)">💋 Серія ніжних поцілунків без приводу <span>+</span></div>
+      <div class="wish-card" onclick="toggleWish(this)">💆‍♀️ Розслабляючий масаж спини або плечей <span>+</span></div>
+      <div class="wish-card" onclick="toggleWish(this)">🍿 Вечір обіймів під улюблений серіал <span>+</span></div>
+      <div class="wish-card" onclick="toggleWish(this)">🍦 Прогулянка за ручку з улюбленими солодощами <span>+</span></div>
     </div>
 
-    <button class="confirm-btn" id="confirmBtn" onclick="saveWishes()">Зафіксувати вибір 💖</button>
+    <button class="confirm-btn" id="confirmBtn" onclick="sendWishes()">Зафіксувати вибір 💖</button>
     <br>
     <a href="present.html" class="back-btn">← Назад до подарунків</a>
   </div>
 
   <script>
     let selectedCount = 0;
+    
+    const WEB3FORMS_KEY = 'a56afa33-b156-463b-980a-8ab2ee486d5a';
 
     function toggleWish(card) {
       if (card.classList.contains('selected')) {
@@ -50,7 +48,7 @@
         card.querySelector('span').innerText = '+';
         selectedCount--;
       } else {
-        if (selectedCount >= 3) return; 
+        if (selectedCount >= 3) return;
         card.classList.add('selected');
         card.querySelector('span').innerText = '✓';
         selectedCount++;
@@ -60,35 +58,30 @@
       document.getElementById('confirmBtn').style.display = selectedCount === 3 ? 'block' : 'none';
     }
 
-    function saveWishes() {
-      alert("Чудовий вибір! Прийнято до виконання 💕");
-    }
-    function saveWishesToFile() {
+    function sendWishes() {
       const selectedCards = document.querySelectorAll('.wish-card.selected');
-      
-      let fileContent = "💖 ОБРАНІ БАЖАННЯ 💖\n\n";
-      selectedCards.forEach((card, index) => {
-        let wishText = card.innerText.replace(/[+✓]/g, '').trim();
-        fileContent += `${index + 1}. ${wishText}\n`;
+      let wishesText = "";
+      selectedCards.forEach((card, i) => {
+        wishesText += `${i + 1}. ${card.innerText.replace(/[+✓]/g, '').trim()}\n`;
       });
 
-      fileContent += `\nДата підтвердження: ${new Date().toLocaleDateString('uk-UA')}`;
-
-      // 1. Автоматичне створення та завантаження файлу .txt
-      const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'обрані_бажання.txt';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(link.href);
-
-      // 2. Додаткове збереження у localStorage браузера
-      localStorage.setItem('savedWishes', fileContent);
-
-      alert("Вибір прийнято! Файл 'обрані_бажання.txt' збережено 💕");
-      window.location.href = "present.html";
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: 'Обрані бажання 💖',
+          message: wishesText
+        })
+      })
+      .then(() => {
+        alert("Вибір прийнято! 💕");
+        window.location.href = "present.html";
+      })
+      .catch(() => {
+        alert("Вибір прийнято! 💕");
+        window.location.href = "present.html";
+      });
     }
   </script>
 

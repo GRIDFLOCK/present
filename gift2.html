@@ -59,29 +59,34 @@
     }
 
     function sendWishes() {
-      const selectedCards = document.querySelectorAll('.wish-card.selected');
-      let wishesText = "";
-      selectedCards.forEach((card, i) => {
-        wishesText += `${i + 1}. ${card.innerText.replace(/[+✓]/g, '').trim()}\n`;
-      });
+  const selectedCards = document.querySelectorAll('.wish-card.selected');
+  
+  // Отримуємо чистий текст кожного з 3 бажань
+  const wishesList = Array.from(selectedCards).map((card, index) => {
+    let wishText = card.innerText.replace(/[+✓]/g, '').trim().replace(/\s+/g, ' ');
+    return `${index + 1}. ${wishText}`;
+  });
 
-      fetch('https://api.web3forms.com/submit', {
+  // Об'єднуємо через роздільник " | ", щоб у таблиці Web3Forms було видно ВСІ 3 бажання в один рядок
+  const fullMessage = wishesList.join('  |  ');
+
+    fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          access_key: WEB3FORMS_KEY,
-          subject: 'Обрані бажання 💖',
-          message: wishesText
+        access_key: WEB3FORMS_KEY,
+        subject: 'Обрані бажання 💖',
+        message: fullMessage
         })
-      })
-      .then(() => {
+    })
+    .then(() => {
         alert("Вибір прийнято! 💕");
         window.location.href = "present.html";
-      })
-      .catch(() => {
+    })
+    .catch(() => {
         alert("Вибір прийнято! 💕");
         window.location.href = "present.html";
-      });
+    });
     }
   </script>
 

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>password</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Comfortaa', cursive, sans-serif;
+    }
+
+    body {
+      background-color: #f9e8ee; 
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .card-container {
+      background-color: #ffffff;
+      border-radius: 30px;
+      padding: 35px 25px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(233, 150, 175, 0.25);
+      border: 3px solid #f2cddb;
+      position: relative;
+    }
+
+    
+    .avatar-wrapper {
+      margin-bottom: 15px;
+    }
+
+    .avatar-wrapper img {
+      width: 110px;
+      height: auto;
+      border-radius: 50%;
+    }
+    .task-title {
+      color: #7b2cbf;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    /* 2. Підказка */
+    .hint-box {
+      background-color: #fcf0f5;
+      border: 2px dashed #f48fb1;
+      border-radius: 16px;
+      padding: 12px;
+      margin-bottom: 22px;
+      color: #ad1457;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    /* Форма */
+    .password-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* 3. Поле вводу */
+    .input-group {
+      position: relative;
+    }
+
+    .password-input {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2.5px solid #f8bbd0;
+      border-radius: 18px;
+      outline: none;
+      font-size: 16px;
+      text-align: center;
+      background-color: #fffafc;
+      color: #4a0e17;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .password-input::placeholder {
+      color: #d8a7b8;
+    }
+
+    .password-input:focus {
+      border-color: #ec407a;
+      box-shadow: 0 0 12px rgba(236, 64, 122, 0.25);
+      background-color: #ffffff;
+    }
+
+    /* 4. Кнопка увійти */
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #66bb6a, #43a047);
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(102, 187, 106, 0.35);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .submit-btn:hover {
+      box-shadow: 0 8px 22px rgba(102, 187, 106, 0.45);
+      transform: translateY(-2px);
+    }
+
+    .submit-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* Повідомлення про помилку/успіх */
+    .message {
+      margin-top: 15px;
+      font-size: 14px;
+      font-weight: 700;
+      display: none;
+    }
+
+    .message.error {
+      color: #e53935;
+      display: block;
+    }
+
+    .message.success {
+      color: #2e7d32;
+      display: block;
+    }
+
+    /* Анімація струшування при помилці */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    .shake {
+      animation: shake 0.4s ease-in-out;
+    }
+    </style>
+</head>
+<body>
+    <div class="card-container" id="card">
+        <div class="avatar-wrapper">
+            <img id="avatar" src="gif/avatar.gif" alt="Avatar">
+
+
+        <h2 class="task-title">Завдання: Введіть пароль 🔒</h2>
+
+        <div class="hint-box">
+            <b>Підказка:</b> Дата коли ми почали зустрічатись "дд/мм/рр" ✨
+        </div>
+        <form class="password-form" id="passwordForm" onsubmit="return checkPassword(event)">
+     
+            <div class="input-group">
+                <input 
+                type="password" 
+                id="passwordInput" 
+                class="password-input" 
+                placeholder="••••••••" 
+                required 
+                autocomplete="off"
+                >
+            </div>
+            <button type="submit" class="submit-btn">Увійти 💖</button>
+        </form>
+        <div id="message" class="message"></div>
+
+    </div>
+    <script>
+        const passwordFORM = "10/07/2026"
+        
+        
+        function checkPassword(event) {
+            event.preventDefault();
+
+            const input = document.getElementById('passwordInput');
+            const card = document.getElementById('card');
+            const message = document.getElementById('message');
+            const avatar = document.getElementById('avatar');
+
+            if (input.value === passwordFORM) {
+                message.className = 'message success';
+                message.textContent = 'Правильно! Доступ дозволено.🎉💋';
+                
+                avatar.src = 'gif/avatar2.gif';
+                card.style.backgroundColor = '#e1f5fe';
+
+                setTimeout(() => {
+                    alert('Вітаю! Ви успішно увійшли. 💖');
+                }, 300);   
+            } else {
+                message.className = 'message error';
+                message.textContent = 'Невірний пароль. Спробуйте ще раз. ❌🥺';
+                avatar.classList.add('shake');
+                avatar.src = 'gif/shake.gif';
+                card.style.backgroundColor = '#ffebee';
+                setTimeout(() => {
+                    avatar.classList.remove('shake');
+                }, 400);
+            }
+        }
+    </script>
+</body>
+</html>
